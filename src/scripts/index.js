@@ -30,7 +30,32 @@ const editForm = editPopup.querySelector('.popup__form');
 const nameInput = editPopup.querySelector('.popup__input_type_name');
 const jobInput = editPopup.querySelector('.popup__input_type_description');
 
+// DOM узлы для формы добавления карточки
+const newCardForm = newCardPopup.querySelector('.popup__form');
+const placeInput = newCardPopup.querySelector('.popup__input_type_card-name');
+const linkInput = newCardPopup.querySelector('.popup__input_type_url');
 
+
+
+
+// Функция обработки отправки формы добавления карточки
+function handleNewCardFormSubmit(evt) {
+  evt.preventDefault();
+
+  const newCardData = {
+    name: placeInput.value,
+    link: linkInput.value,
+  };
+
+  const newCard = createCard(newCardData, deleteCard);
+  placesList.prepend(newCard); // Добавляем в начало списка
+
+  closePopup(newCardPopup); // Закрываем попап
+  newCardForm.reset(); // Очищаем форму
+}
+
+// Прикрепляем обработчик события submit
+newCardForm.addEventListener('submit', handleNewCardFormSubmit);
 
 
 
