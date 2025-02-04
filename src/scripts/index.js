@@ -21,6 +21,50 @@ const imagePopup = document.querySelector('.popup_type_image');
 const popupImage = imagePopup.querySelector('.popup__image');
 const popupCaption = imagePopup.querySelector('.popup__caption');
 
+
+
+// @todo: DOM узлы для формы редактирования профиля
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+const editForm = editPopup.querySelector('.popup__form');
+const nameInput = editPopup.querySelector('.popup__input_type_name');
+const jobInput = editPopup.querySelector('.popup__input_type_description');
+
+
+
+
+
+
+// @todo: Открытие попапа с подстановкой данных
+profileEditButton.addEventListener('click', () => {
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
+  openPopup(editPopup);
+});
+
+// @todo: Функция обработки отправки формы
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+  
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = jobInput.value;
+
+  closePopup(editPopup); // Закрываем попап после сохранения
+}
+
+// @todo: Прикрепляем обработчик события submit
+editForm.addEventListener('submit', handleFormSubmit);
+
+
+
+
+
+
+
+
+
+
+
 // @todo: Функция открытия попапа
 function openPopup(popup) {
   popup.classList.add('popup_is-opened');
@@ -79,6 +123,14 @@ function createCard(data, handleDelete) {
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
+
+  // @todo: Открытие попапа с изображением
+  cardImage.addEventListener('click', () => {
+    popupImage.src = data.link;
+    popupImage.alt = data.name;
+    popupCaption.textContent = data.name;
+    openPopup(imagePopup);
+  });
 
   // Обработчик удаления карточки
   deleteButton.addEventListener('click', () => handleDelete(cardElement));
