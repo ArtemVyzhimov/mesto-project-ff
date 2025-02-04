@@ -131,33 +131,43 @@ newCardButton.addEventListener('click', () => openPopup(newCardPopup));
 
 
 
+// Функция обработки лайка
+function handleLike(cardLikeButton) {
+  cardLikeButton.classList.toggle('card__like-button_is-active');
+}
 
 
 
 
 
 
+// Функция обработки клика по изображению
+function handleImageClick(data) {
+  popupImage.src = data.link;
+  popupImage.alt = data.name;
+  popupCaption.textContent = data.name;
+  openPopup(imagePopup);
+}
 
-// @todo: Функция создания карточки
+// Обновленная функция создания карточки
 function createCard(data, handleDelete) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
   const deleteButton = cardElement.querySelector('.card__delete-button');
+  const likeButton = cardElement.querySelector('.card__like-button');
 
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
 
-  // @todo: Открытие попапа с изображением
-  cardImage.addEventListener('click', () => {
-    popupImage.src = data.link;
-    popupImage.alt = data.name;
-    popupCaption.textContent = data.name;
-    openPopup(imagePopup);
-  });
+  // Открытие попапа с изображением
+  cardImage.addEventListener('click', () => handleImageClick(data));
 
-  // Обработчик удаления карточки
+  // Лайк карточки
+  likeButton.addEventListener('click', () => handleLike(likeButton));
+
+  // Удаление карточки
   deleteButton.addEventListener('click', () => handleDelete(cardElement));
 
   return cardElement;
