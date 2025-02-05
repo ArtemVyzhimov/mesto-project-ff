@@ -1,6 +1,6 @@
 import '../pages/index.css'; 
 import { initialCards } from './cards.js';
-import { openPopup, closePopup } from '../components/modal.js';
+import { openPopup, closePopup, closeByOverlayClick } from '../components/modal.js';
 import { createCard, deleteCard } from '../components/card.js';
 
 // DOM узлы
@@ -16,7 +16,7 @@ const newCardPopup = document.querySelector('.popup_type_new-card');
 // DOM узлы для формы редактирования профиля
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
-const editForm = editPopup.querySelector('.popup__form');
+const formEditProfile = editPopup.querySelector('.popup__form');
 const nameInput = editPopup.querySelector('.popup__input_type_name');
 const jobInput = editPopup.querySelector('.popup__input_type_description');
 
@@ -43,7 +43,7 @@ function handleNewCardFormSubmit(evt) {
 
 // Обработчик события submit
 newCardForm.addEventListener('submit', handleNewCardFormSubmit);
-editForm.addEventListener('submit', handleFormSubmit);
+formEditProfile.addEventListener('submit', submitEditProfileForm);
 
 
 // Открытие попапа с подстановкой данных
@@ -54,7 +54,7 @@ profileEditButton.addEventListener('click', () => {
 });
 
 // Функция отправки формы
-function handleFormSubmit(evt) {
+function submitEditProfileForm (evt) {
   evt.preventDefault();
   
   profileTitle.textContent = nameInput.value;
@@ -65,15 +65,10 @@ function handleFormSubmit(evt) {
 
 // Закрытие попапа кликом на оверлей и крестик
 popups.forEach((popup) => {
-  popup.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close')) {
-      closePopup(popup);
-    }
-  });
+  popup.addEventListener('click', closeByOverlayClick);
 });
 
 // Открытие попапов
-profileEditButton.addEventListener('click', () => openPopup(editPopup));
 newCardButton.addEventListener('click', () => openPopup(newCardPopup));
 
 // Вывести карточки на страницу

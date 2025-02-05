@@ -9,7 +9,14 @@ function closePopup(popup) {
     popup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', closeByEscape);
   }
-  
+
+ // @todo: Функция закрытия оверлей и крестик
+function closeByOverlayClick(evt) {
+  if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close')) {
+    closePopup(evt.target.closest('.popup'));
+  }
+}
+
   // @todo: Закрытие по клавише Esc
 function closeByEscape(evt) {
     if (evt.key === 'Escape') {
@@ -20,4 +27,4 @@ function closeByEscape(evt) {
     }
   }
 
-export {openPopup, closePopup}
+export {openPopup, closePopup, closeByOverlayClick}
