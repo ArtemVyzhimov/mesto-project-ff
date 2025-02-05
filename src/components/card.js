@@ -1,6 +1,3 @@
-// Импортируем нужные функции для работы с попапами
-import { openPopup } from './modal.js';
-
 // Функция обработки лайка карточки
 function handleLike(cardLikeButton) {
   cardLikeButton.classList.toggle('card__like-button_is-active');
