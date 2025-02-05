@@ -1,19 +1,11 @@
+// Импортируем нужные функции для работы с попапами
+import { handleImageClick } from '../scripts/index.js';
+
 // Функция обработки лайка карточки
 function handleLike(cardLikeButton) {
   cardLikeButton.classList.toggle('card__like-button_is-active');
 }
 
-// Функция обработки клика по изображению
-function handleImageClick(data) {
-  const popupImage = document.querySelector('.popup__image');
-  const popupCaption = document.querySelector('.popup__caption');
-  const imagePopup = document.querySelector('.popup_type_image');
-
-  popupImage.src = data.link;
-  popupImage.alt = data.name;
-  popupCaption.textContent = data.name;
-  openPopup(imagePopup);
-}
 
 // Функция удаления карточки
 function deleteCard(cardElement) {

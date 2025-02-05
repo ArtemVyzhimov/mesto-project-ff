@@ -6,6 +6,11 @@ import { createCard, deleteCard } from '../components/card.js';
 // DOM узлы
 const placesList = document.querySelector('.places__list');
 const cardTemplate = document.querySelector('#card-template').content;
+
+const popupImage = document.querySelector('.popup__image'); 
+const popupCaption = document.querySelector('.popup__caption'); 
+const imagePopup = document.querySelector('.popup_type_image'); 
+
 // Попапы
 const profileEditButton = document.querySelector('.profile__edit-button');
 const newCardButton = document.querySelector('.profile__add-button');
@@ -24,6 +29,14 @@ const jobInput = editPopup.querySelector('.popup__input_type_description');
 const newCardForm = newCardPopup.querySelector('.popup__form');
 const placeInput = newCardPopup.querySelector('.popup__input_type_card-name');
 const linkInput = newCardPopup.querySelector('.popup__input_type_url');
+
+// Функция обработки клика по изображению 
+export function handleImageClick(data) { 
+  popupImage.src = data.link; 
+  popupImage.alt = data.name; 
+  popupCaption.textContent = data.name; 
+  openPopup(imagePopup); 
+}  
 
 // Функция обработки отправки формы добавления карточки
 function handleNewCardFormSubmit(evt) {
