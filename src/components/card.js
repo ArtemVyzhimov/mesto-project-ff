@@ -1,6 +1,3 @@
-// Импортируем нужные функции для работы с попапами
-import { handleImageClick } from '../scripts/index.js';
-
 // Функция обработки лайка карточки
 function handleLike(cardLikeButton) {
   cardLikeButton.classList.toggle('card__like-button_is-active');
@@ -13,7 +10,7 @@ function deleteCard(cardElement) {
 }
 
 // Функция создания карточки
-function createCard(data) {
+function createCard(data, handleImageClick, handleLike, deleteCard){
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
@@ -34,4 +31,4 @@ function createCard(data) {
 }
 
 // Экспорт функций
-export { createCard, deleteCard };
+export { createCard, deleteCard, handleLike };

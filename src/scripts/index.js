@@ -1,7 +1,7 @@
 import '../pages/index.css'; 
 import { initialCards } from './cards.js';
 import { openPopup, closePopup, closeByOverlayClick } from '../components/modal.js';
-import { createCard, deleteCard } from '../components/card.js';
+import { createCard, deleteCard, handleLike } from '../components/card.js';
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -47,7 +47,7 @@ function handleNewCardFormSubmit(evt) {
     link: linkInput.value,
   };
 
-  const newCard = createCard(newCardData, deleteCard);
+  const newCard = createCard(newCardData, handleImageClick, handleLike, deleteCard);
   placesList.prepend(newCard);
 
   closePopup(newCardPopup);
@@ -87,7 +87,7 @@ newCardButton.addEventListener('click', () => openPopup(newCardPopup));
 // Вывести карточки на страницу
 function renderCards(cards) {
   cards.forEach((cardData) => {
-    const card = createCard(cardData, deleteCard);
+    const card = createCard(cardData, handleImageClick, handleLike, deleteCard);
     placesList.append(card);
   });
 }
