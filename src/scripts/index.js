@@ -2,6 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { openPopup, closePopup, closeByOverlayClick } from '../components/modal.js';
 import { createCard, deleteCard, handleLike } from '../components/card.js';
+import { enableValidation,  } from '../components/validation.js';
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -94,3 +95,12 @@ function renderCards(cards) {
 
 // Вызов рендера для начального массива карточек
 renderCards(initialCards);
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});
