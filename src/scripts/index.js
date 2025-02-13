@@ -2,7 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { openPopup, closePopup, closeByOverlayClick } from '../components/modal.js';
 import { createCard, deleteCard, handleLike } from '../components/card.js';
-import { enableValidation } from '../components/validation.js';
+import { enableValidation, clearValidation } from '../components/validation.js';
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -62,6 +62,7 @@ formEditProfile.addEventListener('submit', submitEditProfileForm);
 
 // Открытие попапа с подстановкой данных
 profileEditButton.addEventListener('click', () => {
+  clearValidation(formEditProfile, validationSettings);
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
   openPopup(editPopup);
@@ -82,8 +83,12 @@ popups.forEach((popup) => {
   popup.addEventListener('click', closeByOverlayClick);
 });
 
-// Открытие попапов
-newCardButton.addEventListener('click', () => openPopup(newCardPopup));
+// Открытие попапа добавления карточки с очисткой валидации
+newCardButton.addEventListener('click', () => {
+  clearValidation(newCardForm, validationSettings); // Очистка ошибок валидации
+  newCardForm.reset();
+  openPopup(newCardPopup);
+});
 
 // Вывести карточки на страницу
 function renderCards(cards) {
