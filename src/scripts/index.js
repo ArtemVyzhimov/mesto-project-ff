@@ -5,7 +5,7 @@ import { createCard, deleteCard, handleLike } from '../components/card.js';
 import { enableValidation, clearValidation } from '../components/validation.js';
 
 // Импорты API
-import { getUserMe, getCards } from '../components/api.js';
+import { getUserMe, getCards, editProfile } from '../components/api.js';
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -72,14 +72,20 @@ profileEditButton.addEventListener('click', () => {
   openPopup(editPopup);
 });
 
-// Функция отправки формы
-function submitEditProfileForm (evt) {
+// Функция отправки формы с api
+function submitEditProfileForm(evt) {
   evt.preventDefault();
-  
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
 
-  closePopup(editPopup); 
+  const newName = nameInput.value;
+  const newAbout = jobInput.value;
+
+  editProfile(newName, newAbout)
+    .then((userData) => {
+      profileTitle.textContent = userData.name;
+      profileDescription.textContent = userData.about;
+      closePopup(editPopup);
+    })
+    .catch(err => console.error("Ошибка обновления профиля:", err));
 }
 
 // Закрытие попапа кликом на оверлей и крестик
