@@ -4,6 +4,10 @@ import { openPopup, closePopup, closeByOverlayClick } from '../components/modal.
 import { createCard, deleteCard, handleLike } from '../components/card.js';
 import { enableValidation, clearValidation } from '../components/validation.js';
 
+// Импорты API
+import { getUserInfo } from "../components/api.js";
+import { getInitialCards } from "../components/api.js";
+
 // DOM узлы
 const placesList = document.querySelector('.places__list');
 const cardTemplate = document.querySelector('#card-template').content;
@@ -25,6 +29,7 @@ const profileDescription = document.querySelector('.profile__description');
 const formEditProfile = editPopup.querySelector('.popup__form');
 const nameInput = editPopup.querySelector('.popup__input_type_name');
 const jobInput = editPopup.querySelector('.popup__input_type_description');
+const profileAvatar = document.querySelector('.profile__image');
 
 // DOM узлы для формы добавления карточки
 const newCardForm = newCardPopup.querySelector('.popup__form');
@@ -101,6 +106,7 @@ function renderCards(cards) {
 // Вызов рендера для начального массива карточек
 renderCards(initialCards);
 
+//Валидации
 export const validationSettings = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -111,3 +117,28 @@ export const validationSettings = {
 }; 
 
 enableValidation(validationSettings);
+
+//Апишки
+// Загружаем данные пользователя и обновляем профиль
+getUserInfo()
+  .then((userData) => {
+    profileTitle.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    profileAvatar.src = userData.avatar;
+
+    // Заполняем поля формы редактирования
+    nameInput.value = userData.name;
+    jobInput.value = userData.about;
+  })
+  .catch((err) => {
+    console.error("Ошибка при загрузке данных пользователя:", err);
+  });
+
+
+getInitialCards()
+  .then((cards) => {
+    console.log("Карточки с сервера:", cards);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
