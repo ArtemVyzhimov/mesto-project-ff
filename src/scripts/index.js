@@ -1,16 +1,15 @@
 import '../pages/index.css'; 
-import { initialCards } from './cards.js';
+// import { initialCards } from './cards.js';
 import { openPopup, closePopup, closeByOverlayClick } from '../components/modal.js';
 import { createCard, deleteCard, handleLike } from '../components/card.js';
 import { enableValidation, clearValidation } from '../components/validation.js';
 
 // Импорты API
-import { getUserInfo } from "../components/api.js";
-import { getInitialCards } from "../components/api.js";
+import { getUserMe, getCards } from '../components/api.js';
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
-const cardTemplate = document.querySelector('#card-template').content;
+// const cardTemplate = document.querySelector('#card-template').content;
 
 const popupImage = document.querySelector('.popup__image'); 
 const popupCaption = document.querySelector('.popup__caption'); 
@@ -95,16 +94,39 @@ newCardButton.addEventListener('click', () => {
   openPopup(newCardPopup);
 });
 
-// Вывести карточки на страницу
-function renderCards(cards) {
-  cards.forEach((cardData) => {
+// Функция обновления профиля
+const updateUserProfile = (userData) => {
+  profileTitle.textContent = userData.name;
+  profileDescription.textContent = userData.about;
+  profileAvatar.src = userData.avatar;
+};
+
+// Функция рендера карточек
+const renderCards = (cards) => {
+  cards.forEach(cardData => {
     const card = createCard(cardData, handleImageClick, handleLike, deleteCard);
     placesList.append(card);
   });
-}
+};
 
-// Вызов рендера для начального массива карточек
-renderCards(initialCards);
+// Загрузка данных профиля и карточек
+Promise.all([getUserMe(), getCards()])
+  .then(([userData, cards]) => {
+    updateUserProfile(userData);
+    renderCards(cards);
+  })
+  .catch(err => console.error("Ошибка загрузки данных:", err));
+
+// Вывести карточки на страницу (старое)
+// function renderCards(cards) {
+//   cards.forEach((cardData) => {
+//     const card = createCard(cardData, handleImageClick, handleLike, deleteCard);
+//     placesList.append(card);
+//   });
+// }
+
+// Вызов рендера для начального массива карточек (старое)
+// renderCards(initialCards);
 
 //Валидации
 export const validationSettings = {
@@ -117,28 +139,3 @@ export const validationSettings = {
 }; 
 
 enableValidation(validationSettings);
-
-//Апишки
-// Загружаем данные пользователя и обновляем профиль
-getUserInfo()
-  .then((userData) => {
-    profileTitle.textContent = userData.name;
-    profileDescription.textContent = userData.about;
-    profileAvatar.src = userData.avatar;
-
-    // Заполняем поля формы редактирования
-    nameInput.value = userData.name;
-    jobInput.value = userData.about;
-  })
-  .catch((err) => {
-    console.error("Ошибка при загрузке данных пользователя:", err);
-  });
-
-
-getInitialCards()
-  .then((cards) => {
-    console.log("Карточки с сервера:", cards);
-  })
-  .catch((err) => {
-    console.error(err);
-  });

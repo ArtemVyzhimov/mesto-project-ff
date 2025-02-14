@@ -7,30 +7,52 @@ const config = {
     },
   };
 
-// Функция для получения данных пользователя
-export const getUserInfo = () => {
-    return fetch(`${config.baseUrl}/users/me`, {
-      headers: config.headers,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-      });
-  };
+// Функция обработки ответа
+const checkResponse = (res) => 
+  res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 
-// Функция для получения карточек
-export const getInitialCards = () => {
-    return fetch(`${config.baseUrl}/cards`, {
-      headers: config.headers,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-      });
-  };
+// Универсальная функция для запросов
+const request = (url, options) => 
+  fetch(`${config.baseUrl}${url}`, options).then(checkResponse);
 
+// Получение карточек
+export const getCards = () => request('/cards', { headers: config.headers });
 
+// Получение данных пользователя
+export const getUserMe = () => request('/users/me', { headers: config.headers });
+
+// Обновление профиля
+export const editProfile = (name, about) => 
+  request('/users/me', {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({ name, about })
+  });
+
+// Добавление карточки
+export const addCard = (name, link) => 
+  request('/cards', {
+    method: 'POST',
+    headers: config.headers,
+    body: JSON.stringify({ name, link })
+  });
+
+// Удаление карточки
+export const removeCard = (idCard) => 
+  request(`/cards/${idCard}`, { method: 'DELETE', headers: config.headers });
+
+// Лайк карточки
+export const addLikeCard = (idCard) => 
+  request(`/cards/likes/${idCard}`, { method: 'PUT', headers: config.headers });
+
+// Удаление лайка
+export const deleteLikeCard = (idCard) => 
+  request(`/cards/likes/${idCard}`, { method: 'DELETE', headers: config.headers });
+
+// Обновление аватара
+export const editAvatar = (avatar) => 
+  request('/users/me/avatar', {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({ avatar })
+  });
