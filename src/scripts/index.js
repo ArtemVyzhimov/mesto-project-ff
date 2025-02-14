@@ -54,7 +54,7 @@ function handleNewCardFormSubmit(evt) {
 
   addCard(newCardData.name, newCardData.link) // Отправляем карточку на сервер
     .then((card) => {
-      const newCard = createCard(card, handleImageClick, handleLike, deleteCard);
+      const newCard = createCard(card, handleImageClick, handleLike, deleteCard, currentUserId);
       placesList.prepend(newCard);
       closePopup(newCardPopup);
       newCardForm.reset();
@@ -110,10 +110,12 @@ const updateUserProfile = (userData) => {
   profileAvatar.src = userData.avatar;
 };
 
+let currentUserId; // Создаём переменную для ID пользователя
+
 // Функция рендера карточек
-const renderCards = (cards) => {
+const renderCards = (cards, currentUserId) => {
   cards.forEach(cardData => {
-    const card = createCard(cardData, handleImageClick, handleLike, deleteCard);
+    const card = createCard(cardData, handleImageClick, handleLike, deleteCard, currentUserId);
     placesList.append(card);
   });
 };
@@ -121,8 +123,13 @@ const renderCards = (cards) => {
 // Загрузка данных профиля и карточек
 Promise.all([getUserMe(), getCards()])
   .then(([userData, cards]) => {
+    currentUserId = userData._id; // Сохраняем ID пользователя
     updateUserProfile(userData);
-    renderCards(cards);
+
+    cards.forEach(cardData => {
+      const card = createCard(cardData, handleImageClick, handleLike, deleteCard, currentUserId);
+      placesList.append(card);
+    });
   })
   .catch(err => console.error("Ошибка загрузки данных:", err));
 
