@@ -5,7 +5,7 @@ import { createCard, deleteCard, handleLike } from '../components/card.js';
 import { enableValidation, clearValidation } from '../components/validation.js';
 
 // Импорты API
-import { getUserMe, getCards, editProfile } from '../components/api.js';
+import { getUserMe, getCards, editProfile, addCard } from '../components/api.js';
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -43,7 +43,7 @@ export function handleImageClick(data) {
   openPopup(imagePopup); 
 }  
 
-// Функция обработки отправки формы добавления карточки
+// Функция обработки отправки формы добавления карточки c Api
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
 
@@ -52,11 +52,14 @@ function handleNewCardFormSubmit(evt) {
     link: linkInput.value,
   };
 
-  const newCard = createCard(newCardData, handleImageClick, handleLike, deleteCard);
-  placesList.prepend(newCard);
-
-  closePopup(newCardPopup);
-  newCardForm.reset();
+  addCard(newCardData.name, newCardData.link) // Отправляем карточку на сервер
+    .then((card) => {
+      const newCard = createCard(card, handleImageClick, handleLike, deleteCard);
+      placesList.prepend(newCard);
+      closePopup(newCardPopup);
+      newCardForm.reset();
+    })
+    .catch(err => console.error("Ошибка добавления карточки:", err));
 }
 
 // Обработчик события submit
