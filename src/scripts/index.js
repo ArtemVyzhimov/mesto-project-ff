@@ -21,6 +21,7 @@ const newCardButton = document.querySelector('.profile__add-button');
 const popups = document.querySelectorAll('.popup');
 const editPopup = document.querySelector('.popup_type_edit');
 const newCardPopup = document.querySelector('.popup_type_new-card');
+const avatarPopup = document.querySelector('.popup_type_avatar');
 
 // DOM узлы для формы редактирования профиля
 const profileTitle = document.querySelector('.profile__title');
@@ -29,6 +30,7 @@ const formEditProfile = editPopup.querySelector('.popup__form');
 const nameInput = editPopup.querySelector('.popup__input_type_name');
 const jobInput = editPopup.querySelector('.popup__input_type_description');
 const profileAvatar = document.querySelector('.profile__image');
+
 
 // DOM узлы для формы добавления карточки
 const newCardForm = newCardPopup.querySelector('.popup__form');
@@ -101,6 +103,11 @@ newCardButton.addEventListener('click', () => {
   clearValidation(newCardForm, validationSettings); // Очистка ошибок валидации
   newCardForm.reset();
   openPopup(newCardPopup);
+});
+
+// Открытие попапа Аватара
+profileAvatar.addEventListener('click', () => {
+  openPopup(avatarPopup);
 });
 
 // Функция обновления профиля
