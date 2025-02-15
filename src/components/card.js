@@ -1,8 +1,17 @@
-import { removeCard } from "./api.js";
+import { removeCard, addLikeCard, deleteLikeCard  } from "./api.js";
 
-// Функция обработки лайка карточки
-function handleLike(cardLikeButton) {
-  cardLikeButton.classList.toggle('card__like-button_is-active');
+// Функция обработки лайка карточки c API
+function handleLike(cardLikeButton, cardId, likeCounter) {
+  const isLiked = cardLikeButton.classList.contains('card__like-button_is-active');
+  
+  const likeAction = isLiked ? deleteLikeCard : addLikeCard;
+
+  likeAction(cardId)
+    .then(updatedCard => {
+      likeCounter.textContent = updatedCard.likes.length; // Обновляем счётчик
+      cardLikeButton.classList.toggle('card__like-button_is-active');
+    })
+    .catch(err => console.error('Ошибка лайка:', err));
 }
 
 
@@ -23,11 +32,18 @@ function createCard(data, handleImageClick, handleLike, deleteCard, currentUserI
   const cardTitle = cardElement.querySelector('.card__title');
   const deleteButton = cardElement.querySelector('.card__delete-button');
   const likeButton = cardElement.querySelector('.card__like-button');
+  const likeCounter = cardElement.querySelector('.card__like-counter');
 
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
+  likeCounter.textContent = data.likes.length;
 
+  // Проверяем, лайкнул ли пользователь карточку
+  if (data.likes.some(user => user._id === currentUserId)) {
+    likeButton.classList.add('card__like-button_is-active');
+  }
+  
   if (data.owner._id !== currentUserId) {
     deleteButton.remove();
   } else {
@@ -36,7 +52,7 @@ function createCard(data, handleImageClick, handleLike, deleteCard, currentUserI
 
   // Обработчики событий
   cardImage.addEventListener('click', () => handleImageClick(data));
-  likeButton.addEventListener('click', () => handleLike(likeButton));
+  likeButton.addEventListener('click', () => handleLike(likeButton, data._id, likeCounter));
   
 
   return cardElement;
