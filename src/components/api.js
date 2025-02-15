@@ -50,9 +50,9 @@ export const deleteLikeCard = (idCard) =>
   request(`/cards/likes/${idCard}`, { method: 'DELETE', headers: config.headers });
 
 // Обновление аватара
-export const editAvatar = (avatar) => 
+export const editAvatar = (avatarUrl) => 
   request('/users/me/avatar', {
     method: 'PATCH',
     headers: config.headers,
-    body: JSON.stringify({ avatar })
+    body: JSON.stringify({ avatar: avatarUrl }) // Оборачиваем в объект
   });

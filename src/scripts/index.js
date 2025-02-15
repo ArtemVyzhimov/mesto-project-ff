@@ -5,7 +5,7 @@ import { createCard, deleteCard, handleLike } from '../components/card.js';
 import { enableValidation, clearValidation } from '../components/validation.js';
 
 // Импорты API
-import { getUserMe, getCards, editProfile, addCard } from '../components/api.js';
+import { getUserMe, getCards, editProfile, addCard, editAvatar } from '../components/api.js';
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -21,7 +21,11 @@ const newCardButton = document.querySelector('.profile__add-button');
 const popups = document.querySelectorAll('.popup');
 const editPopup = document.querySelector('.popup_type_edit');
 const newCardPopup = document.querySelector('.popup_type_new-card');
+
+// Попапы аватара
 const avatarPopup = document.querySelector('.popup_type_avatar');
+const avatarForm = avatarPopup.querySelector('.popup__form');
+const avatarInput = avatarPopup.querySelector('.popup__input_type_avatar');
 
 // DOM узлы для формы редактирования профиля
 const profileTitle = document.querySelector('.profile__title');
@@ -110,11 +114,29 @@ profileAvatar.addEventListener('click', () => {
   openPopup(avatarPopup);
 });
 
+// Функция обновления аватара
+function handleAvatarFormSubmit(evt) {
+  evt.preventDefault();
+
+  const newAvatar = avatarInput.value;
+
+  editAvatar(newAvatar)
+    .then((userData) => {
+      profileAvatar.style.backgroundImage = `url(${userData.avatar})`; // Обновляем аватар на странице
+      closePopup(avatarPopup);
+      avatarForm.reset();
+    })
+    .catch(err => console.error("Ошибка обновления аватара:", err));
+}
+
+// Добавляем обработчик на форму
+avatarForm.addEventListener('submit', handleAvatarFormSubmit);
+
 // Функция обновления профиля
 const updateUserProfile = (userData) => {
   profileTitle.textContent = userData.name;
   profileDescription.textContent = userData.about;
-  profileAvatar.src = userData.avatar;
+  profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
 };
 
 let currentUserId; // Создаём переменную для ID пользователя
