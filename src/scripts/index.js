@@ -41,6 +41,17 @@ const newCardForm = newCardPopup.querySelector('.popup__form');
 const placeInput = newCardPopup.querySelector('.popup__input_type_card-name');
 const linkInput = newCardPopup.querySelector('.popup__input_type_url');
 
+//Функция для изменения состояния кнопки
+function renderLoading(button, isLoading, defaultText = "Сохранить") {
+  if (isLoading) {
+    button.textContent = "Сохранение...";
+    button.disabled = true;
+  } else {
+    button.textContent = defaultText;
+    button.disabled = false;
+  }
+}
+
 // Функция обработки клика по изображению 
 export function handleImageClick(data) { 
   popupImage.src = data.link; 
@@ -52,6 +63,9 @@ export function handleImageClick(data) {
 // Функция обработки отправки формы добавления карточки c Api
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
+  const form = evt.target; 
+  const saveButton = form.querySelector('.popup__button');
+  renderLoading(saveButton, true);
 
   const newCardData = {
     name: placeInput.value,
@@ -65,7 +79,8 @@ function handleNewCardFormSubmit(evt) {
       closePopup(newCardPopup);
       newCardForm.reset();
     })
-    .catch(err => console.error("Ошибка добавления карточки:", err));
+    .catch(err => console.error("Ошибка добавления карточки:", err))
+    .finally(() => renderLoading(saveButton, false));
 }
 
 // Обработчик события submit
@@ -84,6 +99,9 @@ profileEditButton.addEventListener('click', () => {
 // Функция отправки формы с api
 function submitEditProfileForm(evt) {
   evt.preventDefault();
+  const form = evt.target; 
+  const saveButton = form.querySelector('.popup__button');
+  renderLoading(saveButton, true);
 
   const newName = nameInput.value;
   const newAbout = jobInput.value;
@@ -94,7 +112,8 @@ function submitEditProfileForm(evt) {
       profileDescription.textContent = userData.about;
       closePopup(editPopup);
     })
-    .catch(err => console.error("Ошибка обновления профиля:", err));
+    .catch(err => console.error("Ошибка обновления профиля:", err))
+    .finally(() => renderLoading(saveButton, false));
 }
 
 // Закрытие попапа кликом на оверлей и крестик
@@ -117,6 +136,9 @@ profileAvatar.addEventListener('click', () => {
 // Функция обновления аватара
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
+  const form = evt.target;
+  const saveButton = form.querySelector('.popup__button');
+  renderLoading(saveButton, true);
 
   const newAvatar = avatarInput.value;
 
@@ -126,7 +148,8 @@ function handleAvatarFormSubmit(evt) {
       closePopup(avatarPopup);
       avatarForm.reset();
     })
-    .catch(err => console.error("Ошибка обновления аватара:", err));
+    .catch(err => console.error("Ошибка обновления аватара:", err))
+    .finally(() => renderLoading(saveButton, false));
 }
 
 // Добавляем обработчик на форму
