@@ -15,5 +15,8 @@
 }
 
 .card__like {
-  flex-direction: column;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  gap: 5px;
 }
